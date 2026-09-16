@@ -39,7 +39,14 @@ html { scroll-behavior: smooth; }
    the browser re-settles the position after the script has landed it. */
 @media (hover: none), (pointer: coarse) {
   html.snap-page {
-    scroll-snap-type: y mandatory;
+    /* Proximity, not mandatory. Mandatory forces the page to rest on a
+       snap point at all times, which breaks in two ways here: the footer
+       has no snap point of its own, so scrolling to the bottom got yanked
+       back to the chooser; and the chooser is taller than a phone
+       viewport (~960px against ~660px), so the bottom of it could never
+       be scrolled to either. Proximity keeps the page-flip feel on a
+       decisive swipe without ever trapping content off-screen. */
+    scroll-snap-type: y proximity;
   }
 }
 
@@ -436,6 +443,21 @@ body.intro-active { overflow: hidden; }
   html.snap-page .gate-choose {
     scroll-snap-align: start;
     scroll-margin-top: var(--nav-h, 0px);
+  }
+  /* The footer aligns to the BOTTOM of the viewport. Aligning it to the
+     top would ask the page to scroll further than it can (the footer
+     starts below the maximum scroll offset), leaving it unreachable —
+     which is the state this section was previously in. */
+  html.snap-page .footer {
+    scroll-snap-align: end;
+  }
+  /* A section taller than the viewport must never become a hard stop, or
+     its lower half is unreachable. */
+  html.snap-page .gate,
+  html.snap-page .solution,
+  html.snap-page .gate-choose,
+  html.snap-page .footer {
+    scroll-snap-stop: normal;
   }
 }
 /* White rather than gold here — the gold tone gets lost against the

@@ -195,10 +195,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Background video. Phones get a 480p cut (roughly a fifth of the bytes)
   // rather than nothing at all — most traffic here arrives by QR code from
-  // a flyer, so the phone view is the one that matters most. Only two cases
-  // still keep the poster and skip the download entirely: a save-data
-  // connection, where the user has explicitly asked for less, and
-  // reduced-motion, where looping footage is the thing they opted out of.
+  // a flyer, so the phone view is the one that matters most.
+  //
+  // Reduced-motion deliberately does NOT block playback here. It used to,
+  // and the result was that anyone with iOS "Reduce Motion" on — a common
+  // setting people turn on for the OS interface, not for video — saw a
+  // still poster on every page with no way to start it. That setting is
+  // about not being ambushed by motion, which is answered by giving a way
+  // to stop it, not by silently removing the content. So the footage plays
+  // for everyone and the pause control below is always available; WCAG
+  // 2.2.2 wants exactly that mechanism for looping background media.
+  // Reduced-motion still suppresses the logo intro and the scroll reveals.
+  //
+  // Save-data and 2G are different: those are bandwidth signals, not motion
+  // preferences, and there the right answer really is to skip the download.
   const bgVideos = document.querySelectorAll('video[data-src]');
   if (bgVideos.length) {
     const smallScreen = window.matchMedia('(max-width: 860px)').matches;
@@ -208,15 +218,108 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2G/slow-3G would spend the whole visit buffering; treat it like save-data.
     const slowLink = /^(slow-2g|2g)$/.test(conn.effectiveType || '');
 
-    if (!reducedMotion && !saveData && !slowLink) {
+    // ?debug=video — on-screen readout. Built BEFORE the gate below, and
+    // outside it, so that a blocked page still reports why: a panel that
+    // only renders when video is enabled can't tell you that video was
+    // disabled. Opt-in via query string; never shown to real visitors.
+    const debugPanel = /[?&]debug=video/.test(location.search)
+      ? (() => {
+          const el = document.createElement('div');
+          el.setAttribute('style', [
+            'position:fixed', 'left:8px', 'right:8px', 'bottom:8px', 'z-index:9999',
+            'background:rgba(0,0,0,.9)', 'color:#0f0',
+            'font:11px/1.45 ui-monospace,Menlo,monospace',
+            'padding:10px', 'border-radius:8px', 'white-space:pre-wrap',
+            'max-height:50vh', 'overflow:auto'
+          ].join(';'));
+          document.body.appendChild(el);
+          return el;
+        })()
+      : null;
+
+    const blockedBy = saveData ? 'save-data (Low Data Mode)'
+      : slowLink ? `slow connection (${conn.effectiveType})`
+      : null;
+
+    if (debugPanel) {
+      const STATES = ['HAVE_NOTHING', 'HAVE_METADATA', 'HAVE_CURRENT', 'HAVE_FUTURE', 'HAVE_ENOUGH'];
+      const rejections = new Map();
+      const render = () => {
+        const lines = [
+          `screen   ${innerWidth}x${innerHeight}  smallScreen=${smallScreen}`,
+          `motion   reduced=${reducedMotion}`,
+          `conn     saveData=${!!saveData}  type=${conn.effectiveType || 'n/a'}`,
+          `videos   ${bgVideos.length} on page`,
+          '',
+          blockedBy ? `>> VIDEO DISABLED BY: ${blockedBy}` : '>> video enabled',
+          ''
+        ];
+        bgVideos.forEach((v) => {
+          const err = v.error ? `code ${v.error.code} ${v.error.message}` : 'none';
+          lines.push(
+            `#${v.id || '(no id)'}`,
+            `  src      ${(v.currentSrc || 'NONE — never assigned').split('/').pop()}`,
+            `  paused   ${v.paused}   t=${v.currentTime.toFixed(1)}`,
+            `  ready    ${v.readyState} ${STATES[v.readyState] || ''}   network=${v.networkState}`,
+            `  size     ${v.videoWidth}x${v.videoHeight}`,
+            `  muted    ${v.muted}  inline=${v.hasAttribute('playsinline')}  autoplay=${v.hasAttribute('autoplay')}`,
+            `  mediaErr ${err}`,
+            `  play()   ${rejections.get(v.id) || (blockedBy ? 'not attempted' : 'pending')}`,
+            ''
+          );
+        });
+        debugPanel.textContent = lines.join('\n');
+      };
+      if (!blockedBy) {
+        bgVideos.forEach((v) => {
+          v.addEventListener('playing', () => rejections.set(v.id, 'OK — playing'));
+          v.addEventListener('error', () => rejections.set(v.id, 'element error'));
+        });
+      }
+      render();
+      setInterval(render, 500);
+      // Let the panel force video on despite the gate, to confirm whether
+      // the gate is the only thing standing in the way.
+      if (blockedBy && /[?&]force=1/.test(location.search)) {
+        bgVideos.forEach((v) => {
+          v.muted = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+          v.setAttribute('autoplay', ''); v.preload = 'auto';
+          v.src = (smallScreen && v.dataset.srcMobile) ? v.dataset.srcMobile : v.dataset.src;
+          v.load();
+          v.play().then(() => rejections.set(v.id, 'OK — forced'))
+                  .catch((e) => rejections.set(v.id, `${e.name}: ${e.message}`));
+        });
+      }
+    }
+
+    if (!blockedBy) {
       bgVideos.forEach((v) => {
         const mobileSrc = v.dataset.srcMobile;
-        v.src = (smallScreen && mobileSrc) ? mobileSrc : v.dataset.src;
-        // iOS only autoplays inline+muted, and only once it has metadata.
-        // Without this the first play() lands before the source is ready
-        // and the poster just sits there.
+        const rect = v.getBoundingClientRect();
+        const startsOnScreen = rect.top < window.innerHeight && rect.bottom > 0;
+
+        // iOS checks muted/playsinline as ATTRIBUTES when it decides whether
+        // a source may autoplay, and it makes that call as the source is
+        // attached — setting the properties afterwards is too late. Set them
+        // both ways, before assigning src.
         v.muted = true;
+        v.defaultMuted = true;
+        v.setAttribute('muted', '');
         v.setAttribute('playsinline', '');
+        v.setAttribute('webkit-playsinline', '');
+
+        // For anything already on screen, let the browser's own autoplay
+        // path run (attribute + preload) rather than relying on a scripted
+        // play(). WebKit treats the two differently and the declarative one
+        // is what its autoplay rules are written against. Off-screen clips
+        // stay lazy and wait for the observer.
+        if (startsOnScreen) {
+          v.setAttribute('autoplay', '');
+          v.preload = 'auto';
+        }
+
+        v.src = (smallScreen && mobileSrc) ? mobileSrc : v.dataset.src;
+        if (startsOnScreen) v.load();
       });
 
       // Sections may share one file, so the browser fetches it once — but
@@ -241,12 +344,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }, { threshold: 0.25 });
       bgVideos.forEach((v) => videoIo.observe(v));
 
+      // Pause control for the looping background footage. Small and low
+      // contrast so it stays out of the design, but always reachable —
+      // it's what makes playing the video for reduced-motion visitors the
+      // right call rather than an imposition. The choice sticks for the
+      // session so it doesn't have to be re-made on every page.
+      const stopKey = 'bca-bg-video-paused';
+      let userPaused = sessionStorage.getItem(stopKey) === '1';
+
       // iOS refuses muted autoplay outright in Low Power Mode, and when
       // Safari's per-site Auto-Play is set to Never — in both cases play()
       // rejects and the poster just sits there. A user gesture lifts the
       // block, so the first tap anywhere retries whatever is on screen.
       // Harmless if autoplay already worked: those are not paused.
+      // It must read userPaused: the click that pauses also bubbles up to
+      // here, and without the check it restarts what was just stopped.
       const retryOnGesture = () => {
+        if (userPaused) return;
         bgVideos.forEach((v) => {
           const r = v.getBoundingClientRect();
           const onScreen = r.top < window.innerHeight && r.bottom > 0;
@@ -256,6 +370,51 @@ document.addEventListener('DOMContentLoaded', () => {
       ['touchstart', 'click'].forEach((evt) => {
         document.addEventListener(evt, retryOnGesture, { once: true, passive: true });
       });
+
+      const toggle = document.createElement('button');
+      toggle.className = 'video-toggle';
+      toggle.type = 'button';
+      document.body.appendChild(toggle);
+
+      const applyState = () => {
+        toggle.setAttribute('aria-pressed', String(userPaused));
+        toggle.setAttribute('aria-label', userPaused ? 'Play background video' : 'Pause background video');
+        toggle.classList.toggle('is-paused', userPaused);
+        bgVideos.forEach((v) => {
+          if (userPaused) {
+            v.pause();
+          } else {
+            const r = v.getBoundingClientRect();
+            if (r.top < window.innerHeight && r.bottom > 0) v.play().catch(() => {});
+          }
+        });
+      };
+
+      toggle.addEventListener('click', () => {
+        userPaused = !userPaused;
+        sessionStorage.setItem(stopKey, userPaused ? '1' : '0');
+        applyState();
+      });
+
+      // The observer must not restart what the visitor chose to stop.
+      videoIo.disconnect();
+      const gatedIo = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const v = entry.target;
+          if (entry.isIntersecting && !userPaused) {
+            v.play().catch(() => {
+              v.addEventListener('loadeddata', () => {
+                if (!userPaused) v.play().catch(() => {});
+              }, { once: true });
+            });
+          } else {
+            v.pause();
+          }
+        });
+      }, { threshold: 0.25 });
+      bgVideos.forEach((v) => gatedIo.observe(v));
+
+      if (userPaused) applyState();
     }
   }
 

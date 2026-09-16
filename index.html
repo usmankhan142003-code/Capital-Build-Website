@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Built Capital Advisory — Calgary Real Estate Development &amp; Investment Advisory</title>
+<meta name="description" content="Calgary real estate development and investment advisory. Tell us who you are and we'll route you to exactly what you need — homeowner evaluation, investor inquiry, or agent connection.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=57">
+</head>
+<body>
+
+<div class="alert-bar" id="alertBar">
+  <div class="alert-bar__inner">
+    <p style="margin:0;">Placeholder notice — swap for a real announcement, licensing note, or seasonal message. <a href="contact.html">Learn more.</a></p>
+    <button class="alert-bar__close" aria-label="Close alert banner">&times;</button>
+  </div>
+</div>
+
+<div class="intro" id="intro" aria-hidden="true" title="Click to skip"></div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo"><img src="assets/img/built-icon-dark.png" alt="Built Capital Advisory" class="nav-logo__icon">BUILT</a>
+  <a href="explore.html" class="nav-cta">Explore Site</a>
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+    <span class="nav-toggle__bar"></span>
+    <span class="nav-toggle__bar"></span>
+    <span class="nav-toggle__bar"></span>
+  </button>
+</nav>
+
+<div class="menu-scrim" id="menuScrim"></div>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-menu__links">
+    <li><a href="explore.html">Explore</a></li>
+    <li><a href="process.html">Process</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="mobile-menu__divider"></div>
+  <a href="explore.html" class="mobile-menu__cta">Explore Site</a>
+</div>
+
+<!-- ENTRY GATE: route the visitor before showing anything else -->
+<header class="gate">
+  <video class="gate-video" id="heroVideo" loop muted playsinline preload="none"
+         poster="assets/img/hero-poster.jpg" data-src="assets/video/hero.mp4" aria-hidden="true"></video>
+  <div class="gate-video-overlay" aria-hidden="true"></div>
+
+  <span class="hero-eyebrow">Real Estate Development &amp; Investment Advisory</span>
+  <h1 class="gate-statement">Your property holds more than you think.</h1>
+  <p class="gate-lede">At Built Capital Advisory, we help Calgary homeowners, investors, and agents
+    see what a lot or a house could actually become — development insight paired with honest
+    numbers, so the decision is always yours to make with the full picture in front of you.</p>
+
+  <a href="#solution" class="scroll-arrow" aria-label="Continue to the next section">
+    <span class="scroll-arrow__label">Continue</span>
+    <span class="scroll-arrow__chevron" aria-hidden="true"></span>
+  </a>
+</header>
+
+<!-- THE PROBLEM WE SOLVE + the numbers behind it -->
+<section class="solution" id="solution">
+  <video class="gate-video" id="solutionVideo" loop muted playsinline preload="none"
+         poster="assets/img/solution-poster.jpg" data-src="assets/video/solution.mp4" aria-hidden="true"></video>
+  <div class="gate-video-overlay solution-overlay" aria-hidden="true"></div>
+
+  <div class="solution-inner">
+    <span class="hero-eyebrow">The problem we solve</span>
+    <h2 class="solution-statement">Most homeowners sell without ever knowing what their lot was worth.</h2>
+    <p class="solution-lede">A tired bungalow on a 50-foot lot might be a renovation, a subdivision, or a
+      teardown — and the gap between those outcomes is routinely six figures. We put those numbers in
+      front of you before you commit to anything.</p>
+
+    <div class="stat-row">
+      <div class="stat-block">
+        <div class="stat-num" data-count="140" data-suffix="+">0</div>
+        <div class="stat-label">Homeowners Advised</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num" data-count="21">0</div>
+        <div class="stat-label">Years of Experience</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num" data-count="8.8" data-decimals="1" data-prefix="$" data-suffix="M+">0</div>
+        <div class="stat-label">In Added Value Unlocked</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONA CHOOSER: the routing step, one screen down -->
+<section class="gate-choose" id="choose">
+  <span class="eyebrow">Where do you fit?</span>
+  <h2 class="text-reveal">Let's get you to the right place.</h2>
+  <p class="gate-choose__lede">Tell us who you are, and we'll point you straight at what you need.</p>
+
+  <div class="gate-grid">
+    <a href="homeowner.html" class="gate-card reveal">
+      <h3>Homeowner</h3>
+      <p>Get a free evaluation and market report on your lot or house.</p>
+      <span class="gate-card__cta">Get My Evaluation &rarr;</span>
+    </a>
+    <a href="investor.html" class="gate-card reveal">
+      <h3>Prospective Investor</h3>
+      <p>Inquire about upcoming developments or land we have available.</p>
+      <span class="gate-card__cta">Explore Opportunities &rarr;</span>
+    </a>
+    <a href="agent.html" class="gate-card reveal">
+      <h3>Agent</h3>
+      <p>Looking to connect with buyers or refer a client our way.</p>
+      <span class="gate-card__cta">Connect With Us &rarr;</span>
+    </a>
+  </div>
+
+  <a href="explore.html" class="gate-skip">Just exploring? See the full site &rarr;</a>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo"><img src="assets/img/built-icon-dark.png" alt="Built Capital Advisory" class="nav-logo__icon">BUILT</a>
+        <p>Calgary real estate consulting for homeowners who want to know what their property could really be worth — before they decide anything.</p>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="explore.html">Explore</a></li>
+          <li><a href="process.html">Process</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get In Touch</h4>
+        <ul>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="tel:+18254494660">(825) 449-4660</a></li>
+          <li><a href="mailto:calgaryconsulting4u@gmail.com">calgaryconsulting4u@gmail.com</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Built Capital Advisory.</span>
+      <span>Built for scanning: QR-friendly, mobile-first.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js?v=57"></script>
+</body>
+</html>

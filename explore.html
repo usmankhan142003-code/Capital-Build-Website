@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore — Built Capital Advisory | Calgary</title>
+<meta name="description" content="See how Built Capital Advisory helps Calgary homeowners, investors, and agents get more from their property.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/vendor/leaflet.css">
+<link rel="stylesheet" href="css/style.css?v=57">
+</head>
+<body>
+
+<div class="alert-bar" id="alertBar">
+  <div class="alert-bar__inner">
+    <p style="margin:0;">Placeholder notice — swap for a real announcement, licensing note, or seasonal message. <a href="contact.html">Learn more.</a></p>
+    <button class="alert-bar__close" aria-label="Close alert banner">&times;</button>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo"><img src="assets/img/built-icon-dark.png" alt="Built Capital Advisory" class="nav-logo__icon">BUILT</a>
+  <a href="index.html" class="nav-cta">Start Here</a>
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+    <span class="nav-toggle__bar"></span>
+    <span class="nav-toggle__bar"></span>
+    <span class="nav-toggle__bar"></span>
+  </button>
+</nav>
+
+<div class="menu-scrim" id="menuScrim"></div>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-menu__links">
+    <li><a href="explore.html" class="active">Explore</a></li>
+    <li><a href="process.html">Process</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="mobile-menu__divider"></div>
+  <a href="index.html" class="mobile-menu__cta">Start Here</a>
+</div>
+
+<!-- HERO: deliberately minimal — one idea, one action -->
+<header class="hero">
+  <span class="hero-eyebrow">Real Estate Consulting</span>
+  <h1>Your lot could be worth <em>more</em> than you think.</h1>
+  <p>We help homeowners figure out exactly what to do with their property to maximize its value — no jargon, no pressure, just a clear plan.</p>
+  <div class="hero-actions">
+    <a href="#process-start" class="btn btn-gold">See How It Works</a>
+    <a href="contact.html" class="btn btn-ghost">Talk to Us</a>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</header>
+
+<!-- STEP BY STEP NARRATIVE -->
+<section class="section" id="process-start">
+  <div class="container">
+    <span class="eyebrow reveal">The Process</span>
+    <h2 class="text-reveal" style="font-size:clamp(1.8rem,4vw,2.6rem); max-width:20ch; margin-bottom:10px;">Three steps. No guesswork.</h2>
+  </div>
+
+  <div class="container">
+    <div class="step-grid reveal">
+
+      <article class="step-card" style="background-image:url('assets/img/step-1.jpg')">
+        <button class="step-card__toggle" aria-expanded="false" aria-controls="step-body-1">
+          <span class="step-card__num">01</span>
+          <span class="step-card__title">We look at what you actually have.</span>
+          <span class="step-card__icon" aria-hidden="true"></span>
+        </button>
+        <div class="step-card__body" id="step-body-1">
+          <p>Lot size, zoning, structure condition, neighbourhood trends — we assess the real,
+            current value of your property, not a generic estimate.</p>
+          <a class="step-card__link" href="process.html">Learn more</a>
+        </div>
+      </article>
+
+      <article class="step-card" style="background-image:url('assets/img/step-2.jpg')">
+        <button class="step-card__toggle" aria-expanded="false" aria-controls="step-body-2">
+          <span class="step-card__num">02</span>
+          <span class="step-card__title">We map out your options.</span>
+          <span class="step-card__icon" aria-hidden="true"></span>
+        </button>
+        <div class="step-card__body" id="step-body-2">
+          <p>Renovate, subdivide, rebuild, sell as-is, or hold — we lay out every realistic path
+            forward with the numbers behind each one, so the decision is yours to make with full
+            information.</p>
+          <a class="step-card__link" href="process.html">Learn more</a>
+        </div>
+      </article>
+
+      <article class="step-card" style="background-image:url('assets/img/step-3.jpg')">
+        <button class="step-card__toggle" aria-expanded="false" aria-controls="step-body-3">
+          <span class="step-card__num">03</span>
+          <span class="step-card__title">You maximize your outcome.</span>
+          <span class="step-card__icon" aria-hidden="true"></span>
+        </button>
+        <div class="step-card__body" id="step-body-3">
+          <p>Once you choose a direction, we help you execute it — connecting you with the right
+            people and keeping the plan on track from decision to closing.</p>
+          <a class="step-card__link" href="process.html">Learn more</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section-tight section-dark">
+  <div class="container reveal">
+    <span class="eyebrow">By the numbers</span>
+    <h2 class="text-reveal" style="color:#fff; font-size:clamp(1.6rem,3.4vw,2.2rem); max-width:22ch; margin-bottom:50px;">A track record built one property at a time.</h2>
+  </div>
+  <div class="container">
+    <div class="stats-grid reveal">
+      <div class="stat">
+        <div class="stat-num" data-count="140">0</div>
+        <div class="stat-label">Homeowners Advised</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-count="27" data-suffix="%">0</div>
+        <div class="stat-label">Avg. Value Increase</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-count="9">0</div>
+        <div class="stat-label">Communities Served</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-count="4.2" data-decimals="1" data-suffix="M+">0</div>
+        <div class="stat-label">In Added Value Unlocked*</div>
+      </div>
+    </div>
+    <p style="margin-top:18px; font-size:0.75rem; color:rgba(255,255,255,0.4);">*Placeholder figures — swap for real client results.</p>
+  </div>
+</section>
+
+<!-- LIVE MAP -->
+<section class="section" style="background:var(--navy-950);">
+  <div class="container reveal">
+    <span class="eyebrow">Where We've Worked</span>
+    <h2 class="text-reveal" style="color:#fff; font-size:clamp(1.6rem,3.4vw,2.2rem); max-width:22ch; margin-bottom:40px;">Homeowners we've helped across Calgary.</h2>
+  </div>
+  <div class="container reveal">
+    <div class="map-wrap" id="calgaryMap" aria-label="Map of Calgary showing where we've worked"></div>
+    <div class="locations-list">
+      <div class="location-item"><div class="city">Altadore</div><div class="figure">+31% value</div></div>
+      <div class="location-item"><div class="city">Killarney</div><div class="figure">+22% value</div></div>
+      <div class="location-item"><div class="city">Bridgeland</div><div class="figure">+19% value</div></div>
+      <div class="location-item"><div class="city">Renfrew</div><div class="figure">+26% value</div></div>
+      <div class="location-item"><div class="city">Bowness</div><div class="figure">+34% value</div></div>
+      <div class="location-item"><div class="city">Airdrie, AB</div><div class="figure">+15% value</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="container reveal">
+    <span class="eyebrow">Client Stories</span>
+    <h2 class="text-reveal" style="font-size:clamp(1.6rem,3.4vw,2.2rem); max-width:22ch; margin-bottom:40px;">Homeowners, in their own words.</h2>
+  </div>
+  <div class="container">
+    <div class="testimonial-grid reveal">
+      <div class="testimonial-card">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote">I had no idea my backyard could be subdivided. Built Capital Advisory walked me through it and I netted six figures I didn't think were possible.</p>
+        <div class="testimonial-author">
+          <div class="avatar"></div>
+          <div>
+            <div class="name">Placeholder Name</div>
+            <div class="role">Homeowner, Altadore</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote">No pressure, no sales pitch. Just a clear breakdown of my options and what each one meant for my bottom line.</p>
+        <div class="testimonial-author">
+          <div class="avatar"></div>
+          <div>
+            <div class="name">Placeholder Name</div>
+            <div class="role">Homeowner, Bowness</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote">We were about to sell as-is. Their analysis showed a small renovation would return way more — and it did.</p>
+        <div class="testimonial-author">
+          <div class="avatar"></div>
+          <div>
+            <div class="name">Placeholder Name</div>
+            <div class="role">Homeowner, Renfrew</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container reveal">
+    <span class="eyebrow">Ready when you are</span>
+    <h2 class="text-reveal">Find out what your property is really worth.</h2>
+    <p style="max-width:46ch; margin:0 auto;">A short conversation is all it takes to see your options. No commitment, no cost.</p>
+    <div class="btn-row">
+      <a href="contact.html" class="btn btn-gold">Start the Conversation</a>
+      <a href="process.html" class="btn btn-ghost">See Our Process</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo"><img src="assets/img/built-icon-dark.png" alt="Built Capital Advisory" class="nav-logo__icon">BUILT</a>
+        <p>Calgary real estate consulting for homeowners who want to know what their property could really be worth — before they decide anything.</p>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="explore.html">Explore</a></li>
+          <li><a href="process.html">Process</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get In Touch</h4>
+        <ul>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="tel:+18254494660">(825) 449-4660</a></li>
+          <li><a href="mailto:calgaryconsulting4u@gmail.com">calgaryconsulting4u@gmail.com</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Built Capital Advisory.</span>
+      <span>Built for scanning: QR-friendly, mobile-first.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/vendor/leaflet.js"></script>
+<script src="js/main.js?v=57"></script>
+</body>
+</html>

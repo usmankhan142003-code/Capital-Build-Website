@@ -1,0 +1,7 @@
+# macOS
+.DS_Store
+
+# Working files kept out of the repo — reference recordings and scratch
+# media live on the external drive, not in version control.
+assets/_recordings/
+*.log

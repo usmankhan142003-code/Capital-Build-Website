@@ -240,6 +240,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }, { threshold: 0.25 });
       bgVideos.forEach((v) => videoIo.observe(v));
+
+      // iOS refuses muted autoplay outright in Low Power Mode, and when
+      // Safari's per-site Auto-Play is set to Never — in both cases play()
+      // rejects and the poster just sits there. A user gesture lifts the
+      // block, so the first tap anywhere retries whatever is on screen.
+      // Harmless if autoplay already worked: those are not paused.
+      const retryOnGesture = () => {
+        bgVideos.forEach((v) => {
+          const r = v.getBoundingClientRect();
+          const onScreen = r.top < window.innerHeight && r.bottom > 0;
+          if (onScreen && v.paused) v.play().catch(() => {});
+        });
+      };
+      ['touchstart', 'click'].forEach((evt) => {
+        document.addEventListener(evt, retryOnGesture, { once: true, passive: true });
+      });
     }
   }
 

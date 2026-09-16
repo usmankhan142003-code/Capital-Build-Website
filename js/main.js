@@ -193,22 +193,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Background video: only fetch it where it's worth the bytes. Phones,
-  // save-data connections and reduced-motion users keep the poster.
+  // Background video. Phones get a 480p cut (roughly a fifth of the bytes)
+  // rather than nothing at all — most traffic here arrives by QR code from
+  // a flyer, so the phone view is the one that matters most. Only two cases
+  // still keep the poster and skip the download entirely: a save-data
+  // connection, where the user has explicitly asked for less, and
+  // reduced-motion, where looping footage is the thing they opted out of.
   const bgVideos = document.querySelectorAll('video[data-src]');
   if (bgVideos.length) {
     const smallScreen = window.matchMedia('(max-width: 860px)').matches;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const saveData = navigator.connection && navigator.connection.saveData;
-    if (!smallScreen && !reducedMotion && !saveData) {
-      bgVideos.forEach((v) => { v.src = v.dataset.src; });
-      // Both sections share one file, so the browser fetches it once —
-      // but decoding two 1080p streams at once is wasted work when only
-      // one section is on screen. Play whichever is in view, pause the rest.
+    const conn = navigator.connection || {};
+    const saveData = conn.saveData;
+    // 2G/slow-3G would spend the whole visit buffering; treat it like save-data.
+    const slowLink = /^(slow-2g|2g)$/.test(conn.effectiveType || '');
+
+    if (!reducedMotion && !saveData && !slowLink) {
+      bgVideos.forEach((v) => {
+        const mobileSrc = v.dataset.srcMobile;
+        v.src = (smallScreen && mobileSrc) ? mobileSrc : v.dataset.src;
+        // iOS only autoplays inline+muted, and only once it has metadata.
+        // Without this the first play() lands before the source is ready
+        // and the poster just sits there.
+        v.muted = true;
+        v.setAttribute('playsinline', '');
+      });
+
+      // Sections may share one file, so the browser fetches it once — but
+      // decoding two streams at once is wasted work when only one section
+      // is on screen. Play whichever is in view, pause the rest.
       const videoIo = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.play().catch(() => {});
-          else entry.target.pause();
+          const v = entry.target;
+          if (entry.isIntersecting) {
+            // play() is also what starts the download on a preload="none"
+            // element, so it has to be called first — waiting for
+            // loadeddata before playing would wait forever. If it's
+            // rejected because no frame is decoded yet, retry once data
+            // arrives.
+            v.play().catch(() => {
+              v.addEventListener('loadeddata', () => v.play().catch(() => {}), { once: true });
+            });
+          } else {
+            v.pause();
+          }
         });
       }, { threshold: 0.25 });
       bgVideos.forEach((v) => videoIo.observe(v));

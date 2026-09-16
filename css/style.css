@@ -588,6 +588,26 @@ p { margin: 0; line-height: 1.65; color: var(--muted); }
 }
 .nav-cta:hover { background: var(--gold-500); border-color: var(--gold-500); }
 
+/* Phone nav. At 390px the desktop sizing overruns the bar and the logo and
+   CTA print on top of each other, so everything tightens up. The CTA stays
+   — most traffic arrives here by QR code from a flyer, so the primary
+   action has to be reachable without opening the drawer first. */
+@media (max-width: 600px) {
+  .nav { padding: 14px 16px; gap: 8px; }
+  .nav-logo { font-size: 1.05rem; gap: 7px; }
+  .nav-logo__icon { height: 24px; }
+  .nav-cta {
+    padding: 8px 12px;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 360px) {
+  /* Nothing left to trim: drop the wordmark and keep the icon. */
+  .nav-logo { font-size: 0; }
+}
+
 /* Hamburger icon: three bars that morph into an X. This is the
    site's only nav trigger at every viewport width — there's no
    separate always-visible desktop link row. */

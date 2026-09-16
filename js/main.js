@@ -19,13 +19,14 @@
     intro.removeEventListener('click', finish);
     intro.classList.add('hide');
     document.body.classList.remove('intro-active');
-    setTimeout(() => intro.remove(), 550);
+    setTimeout(() => intro.remove(), 750);
   };
 
   intro.addEventListener('click', finish);
   requestAnimationFrame(() => {
     setTimeout(() => intro.classList.add('zoom'), 200);
-    setTimeout(finish, 200 + 1500);
+    // Starts the fade partway into the 1.5s zoom rather than after it.
+    setTimeout(finish, 200 + 800);
   });
 })();
 
@@ -413,14 +414,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Persona forms (homeowner / investor / agent): on submit, swap the
-  // form out for a follow-up panel with the "explore the site" CTA.
-  document.querySelectorAll('.persona-form').forEach((form) => {
-    form.addEventListener('submit', (e) => {
+  // Form submission -> Formspree, posted over fetch rather than a normal
+  // form POST so the visitor stays on our page and keeps the confirmation
+  // we wrote, instead of being bounced to Formspree's own thank-you screen.
+  //
+  // The persona forms (homeowner / investor / agent) swap themselves out
+  // for a follow-up panel with the "explore the site" CTA; the general
+  // contact form just reveals an inline confirmation line.
+  document.querySelectorAll('.ajax-form').forEach((form) => {
+    const button = form.querySelector('button[type="submit"]');
+    const okNote = form.querySelector('.form-note--ok');
+    const errNote = form.querySelector('.form-note--err');
+    const followup = form.parentElement.querySelector('.form-followup');
+    const buttonLabel = button ? button.textContent : '';
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const followup = form.parentElement.querySelector('.form-followup');
-      form.style.display = 'none';
-      if (followup) followup.classList.add('is-visible');
+      if (form.dataset.sending === '1') return;
+
+      form.dataset.sending = '1';
+      if (errNote) errNote.hidden = true;
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Sending…';
+      }
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' }
+        });
+        if (!res.ok) throw new Error('Formspree responded ' + res.status);
+
+        form.reset();
+        if (followup) {
+          form.style.display = 'none';
+          followup.classList.add('is-visible');
+        } else if (okNote) {
+          okNote.hidden = false;
+        }
+      } catch (err) {
+        // Network failure or a rejected submission: keep what they typed
+        // and surface the phone/email fallback rather than losing the lead.
+        if (errNote) errNote.hidden = false;
+        if (button) {
+          button.disabled = false;
+          button.textContent = buttonLabel;
+        }
+      } finally {
+        form.dataset.sending = '0';
+      }
     });
   });
 

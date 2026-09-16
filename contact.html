@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=57">
+<link rel="stylesheet" href="css/style.css?v=65">
 </head>
 <body>
 
@@ -41,7 +41,9 @@
   <a href="index.html" class="mobile-menu__cta">Start Here</a>
 </div>
 
-<header class="page-hero">
+<header class="page-hero page-hero--image" style="background-image:url('assets/img/contact-hero.jpg')">
+  <div class="gate-video-overlay page-hero__overlay" aria-hidden="true"></div>
+
   <span class="eyebrow">Start Here</span>
   <h1 class="text-reveal">Tell us about your property.</h1>
   <p>A few details is all we need to start putting your options together. No cost, no obligation.</p>
@@ -50,7 +52,13 @@
 <section class="section">
   <div class="container split">
     <div class="reveal">
-      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('.form-success').style.display='block';">
+      <form class="contact-form ajax-form" method="POST"
+            action="https://formspree.io/f/xqpazyvr">
+        <input type="hidden" name="_subject" value="Built Capital — General contact enquiry">
+        <input type="hidden" name="form_type" value="General contact">
+        <!-- Honeypot: bots fill it, Formspree drops the submission. -->
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"
+               aria-hidden="true" style="position:absolute;left:-9999px;">
         <div class="row">
           <div>
             <label for="name">Full Name</label>
@@ -74,7 +82,8 @@
           <textarea id="notes" name="notes" rows="4" placeholder="e.g. Not sure whether to sell, renovate, or subdivide our lot."></textarea>
         </div>
         <button type="submit" class="btn btn-navy" style="justify-self:start;">Send It Over</button>
-        <p class="form-success" style="display:none; color:var(--gold-500); font-size:0.9rem;">Thanks — this is a placeholder form. Wire it up to a real endpoint (email service / CRM) before launch.</p>
+        <p class="form-note form-note--ok" hidden>Thanks — your message is on its way. We'll be in touch within a day.</p>
+        <p class="form-note form-note--err" hidden>Something went wrong sending that. Please call <a href="tel:+18254494660">(825) 449-4660</a> or email <a href="mailto:calgaryconsulting4u@gmail.com">calgaryconsulting4u@gmail.com</a>.</p>
       </form>
     </div>
 
@@ -130,6 +139,6 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=57"></script>
+<script src="js/main.js?v=65"></script>
 </body>
 </html>

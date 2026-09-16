@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=57">
+<link rel="stylesheet" href="css/style.css?v=65">
 </head>
 <body>
 
@@ -50,7 +50,13 @@
 <section class="section">
   <div class="container split">
     <div class="reveal">
-      <form class="contact-form persona-form">
+      <form class="contact-form persona-form ajax-form" method="POST"
+            action="https://formspree.io/f/xqpazyvr">
+        <input type="hidden" name="_subject" value="Built Capital — Homeowner evaluation request">
+        <input type="hidden" name="form_type" value="Homeowner">
+        <!-- Honeypot: bots fill it, Formspree drops the submission. -->
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"
+               aria-hidden="true" style="position:absolute;left:-9999px;">
         <div class="row">
           <div>
             <label for="name">Full Name</label>
@@ -74,11 +80,12 @@
           <textarea id="notes" name="notes" rows="4" placeholder="e.g. Thinking about selling, renovating, or subdividing our lot."></textarea>
         </div>
         <button type="submit" class="btn btn-navy" style="justify-self:start;">Get My Free Evaluation</button>
+        <p class="form-note form-note--err" hidden>Something went wrong sending that. Please call <a href="tel:+18254494660">(825) 449-4660</a> or email <a href="mailto:calgaryconsulting4u@gmail.com">calgaryconsulting4u@gmail.com</a>.</p>
       </form>
 
       <div class="form-followup">
         <h3>Thanks — we've got it.</h3>
-        <p>Your placeholder submission has been captured. Wire this form up to a real endpoint before launch. In the meantime, take a look around.</p>
+        <p>Your details are on their way to us and we'll follow up within a day. In the meantime, take a look around.</p>
         <a href="explore.html" class="btn btn-gold">Explore Built Capital Advisory</a>
       </div>
     </div>
@@ -134,6 +141,6 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=57"></script>
+<script src="js/main.js?v=65"></script>
 </body>
 </html>
